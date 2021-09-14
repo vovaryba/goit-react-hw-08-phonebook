@@ -20,7 +20,7 @@ export default function AuthNav() {
         style={styles.link}
         activeStyle={styles.activeLink}
       >
-        Регистрация
+        Registration
       </NavLink>
 
       <NavLink
@@ -29,7 +29,7 @@ export default function AuthNav() {
         style={styles.link}
         activeStyle={styles.activeLink}
       >
-        Логин
+        Login
       </NavLink>
     </div>
   );

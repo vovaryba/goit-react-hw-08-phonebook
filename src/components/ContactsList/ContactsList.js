@@ -1,4 +1,4 @@
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { contactsOperations, contactsSelectors } from 'redux/contacts';
 import Contact from './Contact';
@@ -9,7 +9,7 @@ const ContactsList = () => {
   const error = useSelector(contactsSelectors.getError);
   const dispatch = useDispatch();
 
-  //   useEffect(() => dispatch(contactsOperations.fetchContacts()), [dispatch]);
+  useEffect(() => dispatch(contactsOperations.fetchContacts()), [dispatch]);
 
   const onDeleteContact = id => dispatch(contactsOperations.deleteContact(id));
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as registerAPI from 'services/register-api';
 
-export const registration = createAsyncThunk(
+const register = createAsyncThunk(
   'auth/register',
   async (credentials, { rejectWithValue }) => {
     try {
@@ -13,7 +13,7 @@ export const registration = createAsyncThunk(
   },
 );
 
-export const logIn = createAsyncThunk(
+const logIn = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
@@ -25,7 +25,7 @@ export const logIn = createAsyncThunk(
   },
 );
 
-export const logOut = createAsyncThunk(
+const logOut = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
@@ -37,10 +37,30 @@ export const logOut = createAsyncThunk(
   },
 );
 
+const fetchCurrentUser = createAsyncThunk(
+  'auth/refresh',
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+
+    const token = registerAPI.token;
+    const persistedToken = state.auth.token;
+
+    if (persistedToken === null) {
+      return thunkAPI.rejectWithValue();
+    }
+    token.set(persistedToken);
+    try {
+      const refresh = await registerAPI.refresh();
+      return refresh;
+    } catch (error) {}
+  },
+);
+
 const operations = {
-  registration,
+  register,
   logOut,
   logIn,
+  fetchCurrentUser,
 };
 
 export default operations;

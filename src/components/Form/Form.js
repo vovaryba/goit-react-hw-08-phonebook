@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { contactsSelectors, contactsOperations } from 'redux/contacts';
@@ -37,7 +38,7 @@ function Form() {
       return;
     }
 
-    dispatch(contactsOperations.addContact({ name, number }));
+    dispatch(contactsOperations.addContact({ id: uuid(), name, number }));
     reset();
   };
 

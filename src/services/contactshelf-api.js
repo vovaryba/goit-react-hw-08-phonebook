@@ -16,8 +16,3 @@ export async function deleteContact(contactId) {
   await axios.delete(`/contacts/${contactId}`);
   return contactId;
 }
-
-export async function register(credentials) {
-  const { data } = await axios.post('/users/signup', credentials);
-  return data;
-}
