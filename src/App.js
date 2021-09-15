@@ -1,31 +1,39 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Switch, Route } from 'react-router';
+import { useEffect, Suspense, lazy } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Switch } from 'react-router';
 import AppBar from './components/AppBar';
-import HomeView from './views/HomeView';
-import RegisterView from './views/RegisterView';
-import LoginView from './views/LoginView';
-import ContactsView from './views/ContactsView';
-import { authOperations } from 'redux/auth';
+import PrivateRoute from './components/PrivateRoute'
+import PublicRoute from './components/PublicRoute'
+import { authOperations, authSelectors } from 'redux/auth';
+
+const HomeView = lazy(() => import('./views/HomeView'));
+const RegisterView = lazy(() => import('./views/RegisterView'));
+const LoginView = lazy(() => import('./views/LoginView'));
+const ContactsView = lazy(() => import('./views/ContactsView'));
 
 function App() {
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
+	const isFetchingCurrentUser = useSelector(authSelectors.getIsFetchingCurrent);
 
   useEffect(() => {
     dispatch(authOperations.fetchCurrentUser());
   }, [dispatch]);
 
   return (
-    <>
+	  !isFetchingCurrentUser && (
+		  <>
       <AppBar />
 
-      <Switch>
-        <Route exact path="/" component={HomeView} />
-        <Route path="/register" component={RegisterView} />
-        <Route path="/login" component={LoginView} />
-        <Route path="/contacts" component={ContactsView} />
+		  <Switch>
+			  <Suspense fallback={<p>Loading...</p>}>
+				  <PublicRoute exact path="/"><HomeView /></PublicRoute>
+				  <PublicRoute path="/register" restricted><RegisterView /></PublicRoute>
+				  <PublicRoute path="/login" redirectTo="/contacts" restricted><LoginView /></PublicRoute>
+				  <PrivateRoute path="/contacts" redirectTo="/login"><ContactsView /></PrivateRoute>
+			  </Suspense >
       </Switch>
-    </>
+		  </>
+	  )
   );
 }
 
