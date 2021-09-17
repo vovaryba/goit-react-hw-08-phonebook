@@ -1,8 +1,9 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 
 const styles = {
   container: {
-    minHeight: 'calc(100vh - 60px',
+    minHeight: 'calc(100vh - 80px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -16,10 +17,7 @@ const styles = {
 
 const HomeView = () => (
   <div style={styles.container}>
-    <h1 style={styles.title}>
-      Welcome page of our service{' '}
-      <span role="img" aria-label="Welcome icon "></span>
-    </h1>
+    <Typography variant="h1">Welcome page of our service</Typography>
   </div>
 );
 

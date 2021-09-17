@@ -1,8 +1,9 @@
+import React from 'react';
+import { Typography, Button, TextField, Box } from '@material-ui/core';
 import { v4 as uuid } from 'uuid';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { contactsSelectors, contactsOperations } from 'redux/contacts';
-import s from './Form.module.css';
 
 function Form() {
   const [name, setName] = useState('');
@@ -48,37 +49,59 @@ function Form() {
   };
 
   return (
-    <form className={s.form} onSubmit={handleSubmit}>
-      <label>
-        Name
-        <input
-          value={name}
-          onChange={handleChange}
+    <>
+      <Typography
+        sx={{
+          marginTop: 2,
+        }}
+        variant="h3"
+      >
+        Phonebook
+      </Typography>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { marginTop: 2 },
+          width: 400,
+          textAlign: 'center',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          id="standard-basic"
+          label="Name"
           type="text"
           name="name"
-          className={s.input}
+          value={name}
+          onChange={handleChange}
+          fullWidth
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
           required
         />
-      </label>
-      <label>
-        Number
-        <input
-          value={number}
-          onChange={handleChange}
+
+        <TextField
+          id="standard-basic"
+          label="Number"
           type="tel"
           name="number"
-          className={s.input}
+          value={number}
+          onChange={handleChange}
+          fullWidth
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           required
         />
-      </label>
-      <button className={s.button} type="submit">
-        Add contact
-      </button>
-    </form>
+
+        <Button color="primary" variant="contained" type="submit">
+          <Typography variant="h6">Add contact</Typography>
+        </Button>
+      </Box>
+    </>
   );
 }
 

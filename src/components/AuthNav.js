@@ -1,26 +1,31 @@
+import React from 'react';
+import { Typography } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
 
 const styles = {
+  authnav: {
+    display: 'flex',
+  },
   link: {
     padding: 12,
     fontWeight: 700,
-    color: '#2A363B',
+    color: '#FFFFFF',
   },
   activeLink: {
-    color: '#E84A5F',
+    color: '#000000',
   },
 };
 
 export default function AuthNav() {
   return (
-    <div>
+    <div style={styles.authnav}>
       <NavLink
         to="/register"
         exact
         style={styles.link}
         activeStyle={styles.activeLink}
       >
-        Registration
+        <Typography variant="h6">Registration</Typography>
       </NavLink>
 
       <NavLink
@@ -29,7 +34,7 @@ export default function AuthNav() {
         style={styles.link}
         activeStyle={styles.activeLink}
       >
-        Login
+        <Typography variant="h6">Login</Typography>
       </NavLink>
     </div>
   );

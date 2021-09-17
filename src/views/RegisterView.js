@@ -1,17 +1,8 @@
+import React from 'react';
+import { Typography, Button, TextField, Box } from '@material-ui/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import authOperations from '../redux/auth/auth-operations';
-
-const styles = {
-  form: {
-    width: 320,
-  },
-  label: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: 15,
-  },
-};
 
 function RegisterView() {
   const dispatch = useDispatch();
@@ -41,40 +32,75 @@ function RegisterView() {
   };
 
   return (
-    <div>
-      <h1>Registration page</h1>
+    <Box
+      sx={{
+        width: 1200,
+        textAlign: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}
+    >
+      <Typography
+        sx={{
+          marginTop: 2,
+        }}
+        variant="h3"
+      >
+        Registration page
+      </Typography>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { marginTop: 2 },
+          width: 400,
+          textAlign: 'center',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          id="standard-basic"
+          label="Name"
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleChange}
+          fullWidth
+        />
 
-      <form onSubmit={handleSubmit} style={styles.form} autoComplete="off">
-        <label style={styles.label}>
-          Name
-          <input type="text" name="name" value={name} onChange={handleChange} />
-        </label>
+        <TextField
+          id="standard-basic"
+          label="Email"
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          fullWidth
+        />
 
-        <label style={styles.label}>
-          Email
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-          />
-        </label>
+        <TextField
+          id="standard-basic"
+          label="Password"
+          type="password"
+          name="password"
+          value={password}
+          onChange={handleChange}
+          fullWidth
+        />
 
-        <label style={styles.label}>
-          Password
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChange}
-          />
-        </label>
-
-        <button type="submit" variant="primary">
-          Register
-        </button>
-      </form>
-    </div>
+        <Button
+          color="primary"
+          variant="contained"
+          type="submit"
+          onClick={() => dispatch(authOperations.logOut())}
+        >
+          <Typography variant="h6">Register</Typography>
+        </Button>
+      </Box>
+    </Box>
   );
 }
 
