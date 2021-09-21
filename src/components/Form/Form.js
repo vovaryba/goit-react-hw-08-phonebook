@@ -1,26 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Button, TextField, Box } from '@material-ui/core';
 import { v4 as uuid } from 'uuid';
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { contactsSelectors, contactsOperations } from 'redux/contacts';
 
 function Form() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const [nameDirty, setNameDirty] = useState(false);
+  const [numberDirty, setNumberDirty] = useState(false);
+  const [nameError, setNameError] = useState('Name is a required field');
+  const [numberError, setNumberError] = useState('Number is a required field');
+  const [formValid, setFormValid] = useState(false);
   const contacts = useSelector(contactsSelectors.getContacts);
   const dispatch = useDispatch();
 
-  const handleChange = e => {
-    const { name, value } = e.target;
+  useEffect(() => {
+    if (nameError || numberError) {
+      setFormValid(false);
+    } else {
+      setFormValid(true);
+    }
+  }, [nameError, numberError]);
 
-    switch (name) {
+  const nameHandler = e => {
+    setName(e.target.value);
+    const re = /^([^0-9]*)$/;
+    if (e.target.value.length < 1 || !re.test(String(e.target.value))) {
+      setNameError('Name should not contain numbers');
+      if (!e.target.value) {
+        setNameError('Name is a required field');
+      }
+    } else {
+      setNameError('');
+    }
+  };
+
+  const numberHandler = e => {
+    setNumber(e.target.value);
+    const re = /^([0-9]*)$/;
+    if (e.target.value.length < 6 || !re.test(Number(e.target.value))) {
+      setNumberError(
+        'The number should consist only of numbers and have at least six digits',
+      );
+      if (!e.target.value) {
+        setNumberError('Number is a required field');
+      }
+    } else {
+      setNumberError('');
+    }
+  };
+
+  const blurHandler = e => {
+    switch (e.target.name) {
       case 'name':
-        setName(value);
+        setNameDirty(true);
         break;
 
       case 'number':
-        setNumber(value);
+        setNumberDirty(true);
         break;
 
       default:
@@ -77,11 +115,12 @@ function Form() {
           type="text"
           name="name"
           value={name}
-          onChange={handleChange}
+          onChange={e => nameHandler(e)}
+          onBlur={e => blurHandler(e)}
           fullWidth
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
           required
+          error={nameDirty && nameError}
+          helperText={nameDirty && nameError}
         />
 
         <TextField
@@ -90,14 +129,20 @@ function Form() {
           type="tel"
           name="number"
           value={number}
-          onChange={handleChange}
+          onChange={e => numberHandler(e)}
+          onBlur={e => blurHandler(e)}
           fullWidth
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
           required
+          error={numberDirty && numberError}
+          helperText={numberDirty && numberError}
         />
 
-        <Button color="primary" variant="contained" type="submit">
+        <Button
+          disabled={!formValid}
+          color="primary"
+          variant="contained"
+          type="submit"
+        >
           <Typography variant="h6">Add contact</Typography>
         </Button>
       </Box>

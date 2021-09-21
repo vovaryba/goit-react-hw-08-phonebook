@@ -8,7 +8,6 @@ import {
   SvgIcon,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-// import s from './Contact.module.css';
 
 const Contact = ({ name, number, onDeleteContact }) => {
   return (
