@@ -84,6 +84,7 @@ function Form() {
   const reset = () => {
     setName('');
     setNumber('');
+    setFormValid(false);
   };
 
   return (
